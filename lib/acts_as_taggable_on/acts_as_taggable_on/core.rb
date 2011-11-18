@@ -94,7 +94,7 @@ module ActsAsTaggableOn::Taggable
           taggings_context = context ? "_#{context}" : ''
 
           #TODO: fix alias to be smaller
-          taggings_alias   = "#{alias_base_name}#{taggings_context}_taggings_#{tags.map(&:safe_name).join('_')}_#{rand(1024)}"
+          taggings_alias   = "#{alias_base_name}#{taggings_context}_taggings_#{rand(1024)}" #{tags.map(&:safe_name).join('_')}_#{rand(1024)}"
 
           tagging_join  = "JOIN #{ActsAsTaggableOn::Tagging.table_name} #{taggings_alias}" +
                           "  ON #{taggings_alias}.taggable_id = #{table_name}.#{primary_key}" +
@@ -108,7 +108,7 @@ module ActsAsTaggableOn::Taggable
           joins << tagging_join
 
         else
-          tags = options.delete(:like).eql?(true) ? ActsAsTaggableOn::Tag.named_like(tag_list) : ActsAsTaggableOn::Tag.named(tag_list)
+          tags = options.delete(:like).eql?(true) ? ActsAsTaggableOn::Tag.named_like_any(tag_list) : ActsAsTaggableOn::Tag.named_any(tag_list)
           return empty_result unless tags.length == tag_list.length
 
           tags.each do |tag|
